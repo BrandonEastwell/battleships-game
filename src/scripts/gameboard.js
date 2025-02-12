@@ -26,9 +26,11 @@ export default class Gameboard {
 
     for (let i = 0; i < ship.length; i++) {
       if (direction === "horizontal") {
-        this.ships[y][x + i] = ship;
+        if (this.ships[y][x + i] === null) this.ships[y][x + i] = ship;
+        else throw new Error("Ship placement overlapping another ship");
       } else if (direction === "vertical") {
-        this.ships[y + i][x] = ship;
+        if (this.ships[y + i][x] === null) this.ships[y + i][x] = ship;
+        else throw new Error("Ship placement overlapping another ship");
       }
     }
   }
@@ -45,16 +47,3 @@ export default class Gameboard {
     return true;
   }
 }
-0 , 0 , 0 , 0 , 0
-0 , 0 , 0 , 0 , 0
-0 , 0 , 0 , 0 , 0
-0 , 0 , 1 , 0 , 0
-0 , 0 , 0 , 0 , 0
-
-  2,3
-
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0]
