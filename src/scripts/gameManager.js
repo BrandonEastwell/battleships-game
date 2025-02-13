@@ -5,25 +5,28 @@ import View from "./view";
 export default class GameManager {
   gameStart = false;
   playerTurn = false;
-  playerShipLocations;
-  computerShipLocations;
+  playerShipLocations = [];
+  computerShipLocations = [];
 
   constructor(GRID_SIZE = 10) {
     this.GRID_SIZE = GRID_SIZE;
     this.PLAYER = new Player(new Gameboard(GRID_SIZE));
     this.COMPUTER = new Player(new Gameboard(GRID_SIZE));
-    this.VIEW = new View(GRID_SIZE);
+    this.view = new View(GRID_SIZE);
 
-    this.VIEW.RANDOMIZE_BTN.addEventListener('click', () => {
-      this.playerShipLocations = this.PLAYER.randomizeShips(5);
-      this.computerShipLocations = this.COMPUTER.randomizeShips(5);
+    this.view.RANDOMIZE_BTN.addEventListener('click', () => {
+      if (!this.gameStart) {
+        this.playerShipLocations = this.PLAYER.randomizeShips(5);
+        this.computerShipLocations = this.COMPUTER.randomizeShips(5);
 
-      this.VIEW.drawShipsToGrid(this.playerShipLocations);
-      this.toggleGame();
-      this.nextRound();
+        console.log(this.playerShipLocations)
+        this.view.drawShipsToGrid(this.playerShipLocations);
+        this.toggleGame();
+        this.nextRound();
+      }
     })
 
-    this.VIEW.COMPUTER_BOARD.addEventListener('click', (ev) => {
+    this.view.COMPUTER_BOARD.addEventListener('click', (ev) => {
       if (this.gameStart && this.playerTurn) {
         let target = ev.target.closest(".grid-item");
         const {x,y} = target.dataset;
@@ -47,7 +50,7 @@ export default class GameManager {
 
   simulateComputerTurn() {
     const [x,y] = this.randomizeCoord(this.GRID_SIZE);
-    const target = this.VIEW.PLAYER_BOARD.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+    const target = this.view.PLAYER_BOARD.querySelector(`[data-x="${x}"][data-y="${y}"]`);
     if (target.className === "grid-item" || target.className === "grid-item alive") {
       const hitShip = this.PLAYER.gameboard.receiveAttack([x,y]);
       if (hitShip) {
@@ -66,7 +69,7 @@ export default class GameManager {
 
   wonGame(message) {
     this.toggleGame();
-    this.VIEW.setAnnouncementText(message)
+    this.view.setAnnouncementText(message)
   }
 
   toggleGame() {
@@ -76,10 +79,10 @@ export default class GameManager {
   nextRound() {
     this.playerTurn = !this.playerTurn;
     if (!this.playerTurn) {
-      this.VIEW.setAnnouncementText("COMPUTERS TURN...")
-      this.simulateComputerTurn();
+      this.view.setAnnouncementText("COMPUTERS TURN...")
+      setTimeout(this.simulateComputerTurn.bind(this), 1000)
     } else {
-      this.VIEW.setAnnouncementText("YOUR TURN...")
+      this.view.setAnnouncementText("YOUR TURN...")
     }
   }
 

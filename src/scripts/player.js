@@ -19,8 +19,8 @@ export default class Player {
       const shipLength = this.randomizeLength();
       const ship = this.createShip(shipLength);
       try {
-        this.gameboard.placeShip(ship, randCoord, direction);
-        placements.push(randCoord);
+        const placedShipsCoords = this.gameboard.placeShip(ship, randCoord, direction);
+        placements = placements.concat(placedShipsCoords);
         quantity--;
       } catch (e) {
         console.log(e);

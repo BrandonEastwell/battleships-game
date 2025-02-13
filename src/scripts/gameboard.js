@@ -18,20 +18,28 @@ export default class Gameboard {
 
   placeShip(ship, coord, direction) {
     const [x, y] = coord;
-
+    let placed = [];
     if (ship.length + x > this.GRID_SIZE || ship.length + y > this.GRID_SIZE) {
       throw new Error("Ship placement out of bounds of grid")
     }
 
     for (let i = 0; i < ship.length; i++) {
       if (direction === "horizontal") {
-        if (this.ships[y][x + i] === null) this.ships[y][x + i] = ship;
+        if (this.ships[y][x + i] === null) {
+          this.ships[y][x + i] = ship;
+          placed.push([x + i,y]);
+        }
         else throw new Error("Ship placement overlapping another ship");
       } else if (direction === "vertical") {
-        if (this.ships[y + i][x] === null) this.ships[y + i][x] = ship;
+        if (this.ships[y + i][x] === null) {
+          this.ships[y + i][x] = ship;
+          placed.push([x,y + i]);
+        }
         else throw new Error("Ship placement overlapping another ship");
       }
     }
+
+    return placed;
   }
 
   allShipsSunk() {

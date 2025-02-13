@@ -43,6 +43,19 @@ describe("Gameboard", () => {
     expect(board.ships[3][2]).toBe(ship);
   });
 
+  it("places ships at the coordinate [2,1] with ship length 3 returns all 3 coordinate placements", () => {
+    const ship = new Ship(3)
+    const placements = board.placeShip(ship, [2, 1], "vertical");
+    expect(placements.length).toBe(3);
+  });
+
+  it("places ships at the coordinate [2,1] with ship length 2 vertically returns correct [2,1],[2,2] coords", () => {
+    const ship = new Ship(2)
+    const placements = board.placeShip(ship, [2, 1], "vertical");
+    expect(placements[0].toString()).toBe([2,1].toString());
+    expect(placements[1].toString()).toBe([2,2].toString());
+  });
+
   it("should return error 'Ship placement out of bounds of grid'", () => {
     const ship = new Ship(3)
     expect(() => board.placeShip(ship, [6, 1], "vertical")).toThrow(Error)
@@ -60,7 +73,7 @@ describe("Gameboard", () => {
     const ship = new Ship(3);
     board.placeShip(ship, [2, 1], "horizontal");
     board.receiveAttack([2, 1]);
-    expect(board.grid[1][2]).toBe(1);
+    expect(board.ships[1][2]).toBe(null);
   });
 
   it("hits on the same coord should not call hit twice", () => {
@@ -84,4 +97,5 @@ describe("Gameboard", () => {
     board.receiveAttack([2, 1]);
     expect(board.allShipsSunk()).toBe(false);
   });
+
 });
