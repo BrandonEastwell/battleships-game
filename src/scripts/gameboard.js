@@ -8,13 +8,12 @@ export default class Gameboard {
   receiveAttack(coord) {
     const [x, y] = coord;
     let ship = this.ships[y][x];
-    if (ship !== null && this.grid[y][x] === 0) {
+    if (ship !== null) {
       ship.hit();
-      if (ship.isSunk()) {
-        this.allShipsSunk();
-      }
+      this.ships[y][x] = null;
+      return true;
     }
-    this.grid[y][x] = 1;
+    return false;
   }
 
   placeShip(ship, coord, direction) {
