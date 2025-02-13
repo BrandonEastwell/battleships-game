@@ -4,14 +4,14 @@ import Ship from "../scripts/ship";
 describe("Gameboard", () => {
   let board;
   beforeEach(() => {
-    board = new Gameboard();
+    board = new Gameboard(5);
   })
 
-  it("initialise gameboard grid with 25 grid items", () => {
+  it("initialise gameboard grid with 25 spaces", () => {
     expect(board.grid.length).toBe(5);
   });
 
-  it("init ships grid with 25 grid items", () => {
+  it("initialise ships grid with 25 spaces", () => {
     expect(board.ships.length).toBe(5);
   });
 

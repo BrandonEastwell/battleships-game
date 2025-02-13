@@ -10,19 +10,29 @@ export default class Player {
   }
 
   randomizeShips(quantity = 5) {
-    while (quantity > 0) {
-      const randCoord = this.randomizeCoord(quantity);
+    const MAX_ATTEMPTS = 50;
+    let attempts = 0;
+    let placements = [];
+    while (quantity > 0 && attempts < MAX_ATTEMPTS) {
+      const randCoord = this.randomizeCoord(this.gameboard.GRID_SIZE);
       const direction = this.randomizeDirection();
       const shipLength = this.randomizeLength();
       const ship = this.createShip(shipLength);
-
       try {
         this.gameboard.placeShip(ship, randCoord, direction);
+        placements.push(randCoord);
         quantity--;
       } catch (e) {
         console.log(e);
+        attempts++;
       }
     }
+
+    if (attempts >= MAX_ATTEMPTS && quantity !== 0) {
+      console.log("Max attempts reached. Could not place all ships.");
+    }
+
+    return placements;
   }
 
   randomizeCoord(size) {

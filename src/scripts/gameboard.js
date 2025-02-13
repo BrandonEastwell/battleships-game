@@ -1,6 +1,6 @@
 export default class Gameboard {
-  GRID_SIZE = 5;
-  constructor() {
+  constructor(GRID_SIZE = 10) {
+    this.GRID_SIZE = GRID_SIZE;
     this.grid = Array.from({ length: this.GRID_SIZE }, () => Array(this.GRID_SIZE).fill(0));
     this.ships = Array.from({ length: this.GRID_SIZE }, () => Array(this.GRID_SIZE).fill(null));
   }

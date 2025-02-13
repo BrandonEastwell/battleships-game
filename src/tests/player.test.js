@@ -9,7 +9,7 @@ describe("Player", () => {
   })
 
   it("player object should initialize with a gameboard", () => {
-    expect(player.gameboard.grid.length).toBe(5);
+    expect(player.gameboard.grid.length).toBe(10);
   });
 
   it("player creates a ship with length 1", () => {
@@ -44,7 +44,7 @@ describe("Player", () => {
     expect(length).toBeGreaterThan(0);
   });
 
-  it("player randomly places at least 1 ship on gameboard grid", () => {
+  it("player randomly places at least 1 ship on gameboard", () => {
     player.randomizeShips();
     let ships = [];
     player.gameboard.ships.forEach((row) => {
@@ -54,19 +54,25 @@ describe("Player", () => {
         }
       })
     })
+
     expect(ships.length).toBeGreaterThan(0);
   });
 
-  it("player randomly places at least 5 ships on gameboard grid", () => {
-    player.randomizeShips();
+  it("player randomly places exactly 5 ships on gameboard", () => {
+    console.log = jest.fn();
+
+    player.randomizeShips(5);
+
     let ships = [];
     player.gameboard.ships.forEach((row) => {
       row.forEach((ship) => {
         if (ship !== null && !ships.includes(ship)) {
           ships.push(ship);
         }
-      })
-    })
+      });
+    });
+
     expect(ships.length).toBe(5);
+    expect(console.log).not.toHaveBeenCalledWith("Max attempts reached. Could not place all ships.");
   });
 });
